@@ -56,7 +56,14 @@
 
 #ifndef JTCKDINT_H_
 #define JTCKDINT_H_
-#if defined(__has_include) && __has_include(<stdckdint.h>)
+
+#ifdef __has_include
+#define __ckd_has_include(x) __has_include(x)
+#else
+#define __ckd_has_include(x) 0
+#endif
+
+#if __ckd_has_include(<stdckdint.h>)
 #include <stdckdint.h>
 #else
 
@@ -77,16 +84,26 @@
 typedef signed __ckd_intmax __ckd_intmax_t;
 typedef unsigned __ckd_intmax __ckd_uintmax_t;
 
+#ifdef __has_builtin
+#define __ckd_has_builtin(x) __has_builtin(x)
+#else
+#define __ckd_has_builtin(x) 0
+#endif
+
 #if (!defined(__STRICT_ANSI__) &&                                       \
      ((defined(__GNUC__) && __GNUC__ >= 5 && !defined(__ICC)) ||        \
-      (defined(__has_builtin) && (__has_builtin(__builtin_add_overflow) && \
-                                  __has_builtin(__builtin_sub_overflow) && \
-                                  __has_builtin(__builtin_mul_overflow)))))
+      (__ckd_has_builtin(__builtin_add_overflow) &&                     \
+       __ckd_has_builtin(__builtin_sub_overflow) &&                     \
+       __ckd_has_builtin(__builtin_mul_overflow))))
 #define ckd_add(res, x, y) __builtin_add_overflow((x), (y), (res))
 #define ckd_sub(res, x, y) __builtin_sub_overflow((x), (y), (res))
 #define ckd_mul(res, x, y) __builtin_mul_overflow((x), (y), (res))
 
-#elif defined(__cplusplus) && __cplusplus >= 201103L
+#elif (defined(__cplusplus) &&                          \
+       (__cplusplus >= 201103L ||                       \
+        (defined(_MSC_VER) && __cplusplus >= 199711L && \
+         __ckd_has_include(<type_traits>) &&            \
+         __ckd_has_include(<limits>))))
 #include <type_traits>
 #include <limits>
 
@@ -635,7 +652,7 @@ __ckd_declare_mul(__ckd_mul_uint128, unsigned __int128)
 #endif
 
 #else
-#warning "checked integer arithmetic unsupported in this environment"
+#pragma message "checked integer arithmetic unsupported in this environment"
 
 #define ckd_add(res, x, y) (*(res) = (x) + (y), 0)
 #define ckd_sub(res, x, y) (*(res) = (x) - (y), 0)
