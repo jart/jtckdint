@@ -69,7 +69,8 @@
 
 #define __STDC_VERSION_STDCKDINT_H__ 202311L
 
-#if ((defined(__llvm__) ||                                              \
+#if defined(__SIZEOF_LONG__) && __SIZEOF_LONG__ >= 8 && \
+    ((defined(__llvm__) ||                                              \
       (defined(__GNUC__) && __GNUC__ * 100 + __GNUC_MINOR__ >= 406)) && \
      !defined(__STRICT_ANSI__))
 #define __ckd_have_int128
