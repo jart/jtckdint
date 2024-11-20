@@ -1,7 +1,7 @@
 #!/bin/sh
 set -ex
 
-for cc in cc clang; do
+for cc in clang cc; do
   for opt in -O0 -O3 -fsanitize=undefined; do
     make clean
     make CC="$cc -Wall -Wextra -Werror $opt"

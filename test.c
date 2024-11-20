@@ -20,6 +20,8 @@
 #include <stdint.h>
 #include <inttypes.h>
 
+#ifdef __ckd_intmax
+
 #define TBIT(T) (sizeof(T) * 8 - 1)
 #define TMIN(T) (((T) ~(T)0) > 1 ? (T)0 : (T)((__ckd_uintmax_t)1 << TBIT(T)))
 #define TMAX(T) (((T) ~(T)0) > 1 ? (T) ~(T)0 : (T)(((__ckd_uintmax_t)1 << TBIT(T)) - 1))
@@ -151,3 +153,10 @@ int main(int argc, char *argv[]) {
 #endif
 
 }
+
+#else
+int main(int argc, char *argv[]) {
+  (void)argc;
+  (void)argv;
+}
+#endif
