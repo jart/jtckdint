@@ -69,10 +69,7 @@
 
 #define __STDC_VERSION_STDCKDINT_H__ 202311L
 
-#if defined(__SIZEOF_LONG__) && __SIZEOF_LONG__ >= 8 && \
-    ((defined(__llvm__) ||                                              \
-      (defined(__GNUC__) && __GNUC__ * 100 + __GNUC_MINOR__ >= 406)) && \
-     !defined(__STRICT_ANSI__))
+#if (!defined(__STRICT_ANSI__) && defined(__SIZEOF_INT128__))
 #define __ckd_have_int128
 #define __ckd_intmax __int128
 #elif ((defined(__cplusplus) && __cplusplus >= 201103L) ||              \
