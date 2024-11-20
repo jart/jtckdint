@@ -51,7 +51,7 @@
  * Instead, you'll get a pretty good pure C11 and C++11 implementation.
  *
  * @see https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3096.pdf
- * @version 0.1 (2023-07-22)
+ * @version 1.0 (2024-12-07)
  */
 
 #ifndef JTCKDINT_H_
@@ -63,7 +63,7 @@
 #define __ckd_has_include(x) 0
 #endif
 
-#if __ckd_has_include(<stdckdint.h>)
+#if __ckd_has_include(<stdckdint.h>) && !defined(__cplusplus)
 #include <stdckdint.h>
 #else
 
