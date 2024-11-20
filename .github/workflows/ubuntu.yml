@@ -1,0 +1,19 @@
+name: ubuntu
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: check
+      run: make check
+    - name: test
+      run: ./test.sh

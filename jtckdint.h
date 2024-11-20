@@ -63,7 +63,8 @@
 #define __ckd_has_include(x) 0
 #endif
 
-#if __ckd_has_include(<stdckdint.h>)
+/* note: msys2 defines stdckdint.h but it doesn't work with c++ */
+#if __ckd_has_include(<stdckdint.h>) && !defined(__cplusplus)
 #include <stdckdint.h>
 #else
 
@@ -191,16 +192,6 @@ inline bool ckd_sub(__T *__res, __U __a, __V __b) {
   __ckd_uintmax_t __y = __b;
   __ckd_uintmax_t __z = __x - __y;
   *__res = __z;
-  if (sizeof(__z) > sizeof(__U) && sizeof(__z) > sizeof(__V)) {
-    if (sizeof(__z) > sizeof(__T) || std::is_signed<__T>::value) {
-      return static_cast<__ckd_intmax_t>(__z) != static_cast<__T>(__z);
-    } else if (!std::is_same<__T, __ckd_uintmax_t>::value) {
-      return (__z != static_cast<__T>(__z) ||
-              ((std::is_signed<__U>::value ||
-                std::is_signed<__V>::value) &&
-               static_cast<__ckd_intmax_t>(__z) < 0));
-    }
-  }
   bool __truncated = false;
   if (sizeof(__T) < sizeof(__ckd_intmax_t)) {
     __truncated = __z != static_cast<__ckd_uintmax_t>(static_cast<__T>(__z));
